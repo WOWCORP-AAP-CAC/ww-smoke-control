@@ -1,0 +1,20 @@
+---
+scm_provider: "github"
+control_scm_org: "WOWCORP-AAP-CAC"
+control_repo: "ww-smoke-control"
+control_branch: "main"
+platform_scm_org: "WOWCORP-AAP-CAC"
+platform_repo: "ww-smoke-platform"
+create_missing_env_branches: true
+bootstrap_dispatch_fanout: true
+dispatcher_concurrency: serialized
+
+job_templates:
+  genesis: "jt-platform-genesis"
+  bootstrap: "jt-platform-bootstrap_tenant"
+  dispatcher: "jt-platform-casc_dispatcher"
+  drift_detection: "jt-platform-drift_detection"
+
+env_branch_map:
+  poc: dev
+  prod: main

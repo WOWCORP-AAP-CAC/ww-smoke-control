@@ -1,0 +1,15 @@
+---
+# Optional customer naming policy example (inert sample).
+#
+# Rename this file to naming-rules.yml, adapt the patterns for your
+# organization, and uncomment rules to activate naming validation.
+# Omit resource types that should remain unrestricted. Patterns validate
+# resource identities in YAML, not filenames.
+#
+# aap_organizations:
+#   pattern: "^REPLACE_ME .+ Automation$"
+#   example: "REPLACE_ME Platform Automation"
+#
+# aap_teams:
+#   pattern: "^.+ Automation$"
+#   example: "Platform Automation"

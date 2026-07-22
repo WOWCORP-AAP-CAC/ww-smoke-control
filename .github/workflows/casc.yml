@@ -1,0 +1,54 @@
+# Generated thin caller. It passes only the repository metadata and secrets
+# required for its role; privileged AAP apply credentials stay inside AAP JTs.
+name: CasC Pipeline
+
+# Least privilege for generated callers.
+permissions:
+  contents: read
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+    inputs:
+      operation:
+        description: "Protected control operation (leave empty for normal control validation)"
+        required: false
+        default: ""
+        type: choice
+        options:
+          - ""
+          - onboarding_dispatch
+      tenant_id:
+        description: "Required when operation=onboarding_dispatch"
+        required: false
+        type: string
+      control_revision:
+        description: "Optional pinned control commit SHA"
+        required: false
+        type: string
+
+
+jobs:
+  casc:
+    uses: WOWCORP-AAP-CAC/aap-casc-engine/.github/workflows/casc-validate-and-trigger.yml@main
+    with:
+      caller_role: control
+      control_scm_org: WOWCORP-AAP-CAC
+      control_repo: ww-smoke-control
+      control_branch: main
+      dispatcher_jt_name: jt-platform-casc_dispatcher
+      bootstrap_jt_name: jt-platform-bootstrap_tenant
+
+      aap_engine_host: ${{ vars.AAP_ENGINE_HOST }}
+      operation: ${{ github.event.inputs.operation || '' }}
+      tenant_id: ${{ github.event.inputs.tenant_id || '' }}
+      control_revision: ${{ github.event.inputs.control_revision || '' }}
+
+    secrets:
+      AAP_ENV_TARGETS_JSON: ${{ secrets.AAP_ENV_TARGETS_JSON }}
+      ENGINE_REPO_TOKEN: ${{ secrets.ENGINE_REPO_TOKEN }}
+      CONTROL_REPO_TOKEN: ${{ secrets.CONTROL_REPO_TOKEN }}
+
+      AAP_ENGINE_TOKEN: ${{ secrets.AAP_ENGINE_TOKEN }}
